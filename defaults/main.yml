@@ -11,8 +11,7 @@ apache_modules:
   - alias.load
   - auth_basic.load
   - authn_file.load
-  - authz_default.load
-  - authz_groupfile.load
+#  - authz_groupfile.load
   - authz_host.load
   - authz_user.load
   - autoindex.conf
@@ -33,8 +32,8 @@ apache_modules:
   - reqtimeout.conf
   - reqtimeout.load
   - rewrite.load
-  - rpaf.conf
-  - rpaf.load
+#  - rpaf.conf
+#  - rpaf.load
   - setenvif.conf
   - setenvif.load
   - status.conf
