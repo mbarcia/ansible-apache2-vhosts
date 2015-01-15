@@ -32,8 +32,17 @@
     dest: /etc/apache2/ports.conf
   notify: Restart apache
 
+- name: Tighten Apache security (Ubuntu Trusty)
+  copy:
+    src: apache2/security.conf
+    dest: /etc/apache2/conf-available/security.conf
+  notify: Restart apache
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'
+  
 - name: Tighten Apache security
   copy:
-    src: apache2/security
-    dest: /etc/apache2/conf.d/security
+    src: apache2/security.conf
+    dest: /etc/apache2/conf.available/security
   notify: Restart apache
+  when: ansible_distribution != 'Ubuntu' or ansible_distribution_version != '14.04'
+  
