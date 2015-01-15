@@ -1,0 +1,38 @@
+---
+#- name: Create home folders
+#  user:
+#    name: "{{ item['user'] }}"
+#    state: present
+#    createhome: yes
+#    generate_ssh_key: yes
+#    password: ''
+#  with_items: vhost_sites
+#
+- name: Create combined SSH file on the remote host
+  assemble:
+    src: ssh/keys
+    dest: /tmp/combined_ssh.{{inventory_hostname}}
+    remote_src: False
+  sudo: no
+
+- name: Pull combined SSH file from the remote to the controller
+  synchronize: mode=pull src=/tmp/combined_ssh.{{inventory_hostname}} dest=/tmp/combined_ssh.{{inventory_hostname}}
+
+- name: Add SSH public keys
+  authorized_key:
+    user: "{{ item['user'] }}"
+    key: "{{ lookup('file', '/tmp/combined_ssh.' + inventory_hostname) }}"
+  with_items: vhost_sites
+
+- name: Delete combined SSH file from the controller
+  file:
+    path: /tmp/combined_ssh.{{inventory_hostname}}
+    state: absent
+  delegate_to: 127.0.0.1
+  sudo: no
+
+- name: Delete combined SSH file from the remote
+  file:
+    path: /tmp/combined_ssh.{{inventory_hostname}}
+    state: absent
+
