@@ -12,7 +12,7 @@
 
     <Directory {{ vhost_base_path }}/{{ item['host'] }}/public_html/>
         Options +Indexes +FollowSymLinks
-        DirectoryIndex index.php
+        DirectoryIndex index.php index.html
         Order allow,deny
         Allow from all
         AllowOverride All
