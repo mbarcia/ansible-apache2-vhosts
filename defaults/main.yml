@@ -1,70 +1,76 @@
 ---
-apache_packages:
-  - apache2
-  - apache2-doc
-  - apache2-utils
+# options are prefork, worker or event
+apache2_mpm: "prefork"
+
+apache2_packages_ontop:
+# both prefork MPM only 
   - apache2-mpm-itk
   - libapache2-mod-php5
 
-apache_modules:
-  - alias.conf
-  - alias.load
-  - auth_basic.load
-  - authn_file.load
-#  - authz_groupfile.load
-  - authz_host.load
-  - authz_user.load
-  - autoindex.conf
-  - autoindex.load
-  - cgi.load
-  - deflate.conf
-  - deflate.load
-  - dir.conf
-  - dir.load
-  - env.load
-  - expires.load
-  - mime.conf
-  - mime.load
-  - negotiation.conf
-  - negotiation.load
-  - php5.conf
-  - php5.load
-  - reqtimeout.conf
-  - reqtimeout.load
-  - rewrite.load
-#  - rpaf.conf
-#  - rpaf.load
-  - setenvif.conf
-  - setenvif.load
-  - status.conf
-  - status.load
+apache2_modules:
+  - alias
+  - auth_basic
+  - authn_file
+#
+# Debian only (not for Ubuntu)
+  - authz_groupfile
+#
+  - authz_host
+  - authz_user
+  - autoindex
+#
+# prefork MPM only 
+  - cgi
+#
+  - deflate
+  - dir
+  - env
+  - expires
+  - mime
+  - negotiation
+#
+# prefork MPM only 
+  - php5
+#
+  - reqtimeout
+  - rewrite
+#
+# Debian only (not for Ubuntu)
+  - rpaf
+#
+  - setenvif
+  - status
+
+php5_packages_ontop:
+  - php-pear
+  - php-soap
+  - php5-curl
+  - php5-gd
+  - php5-gmp
+  - php5-mcrypt
+  - php5-memcache
+  - php5-mysql
 
 apache_host: "127.0.0.1"
 apache_port: "80"
 apache_ssl_port: "443"
 
+# worker or event only
+fpm_host: 127.0.0.1
+fpm_port: 9000
 
-php_packages:
-  - php5-common
-  - php5-cli
-  - php5-suhosin
-  - php5-apc
-  - php-pear
-  - php5-gd
-  - php5-memcache
-  - php5-mcrypt
-  - php5-gmp
-  - php5-mysql
-  - php5-curl
-
-post_max_size: "10M"
-upload_max_filesize: "10M"
-php_timezone: "Australia/Brisbane"
+post_max_size: "16M"
+upload_max_filesize: "16M"
+php_timezone: "Europe/Madrid"
 memory_limit: "32M"
 html_errors: "Off"
 
-vhost_base_path: "/srv/www"
+# Ubuntu Trusty / Debian Wheezy
+vhost_base_path: "/var/www/html"
 
+#
+# Virtual Hosts section example
+#
 deleted_vhost_sites:
   - {
       host: 'del.example.com',
@@ -90,13 +96,19 @@ vhost_sites:
       user: 'example',
       group: 'example',
       admin_email: 'admin@example.com',
-      ssl: {
-        enabled: False,
-        ssl_certificate: '/path/to/ssl/cert',
-        ssl_certificate_key: '/path/to/ssl/private_key'
-      },
       aliases: [
         www.example.com
-        au.example.com
-      ]
+      ],
+      #
+      # Source settings for Drupsible initial import of website
+      #
+      # base path in the source/remote host
+      source_docroot: '/var/www/html/example.com/public_html',
+      # source/remote hostname
+      source_remote_host: 'localhost',
+      # source/remote ssh user
+      source_remote_user: 'example',
+      # ssh user and port in case of using ProxyCommand
+      source_proxy_credentials: 'example@example.com',
+      source_proxy_port: 22,
     }

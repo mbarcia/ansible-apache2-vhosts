@@ -14,14 +14,14 @@ per-host basis while others will be role based.
 
 ### Apache variables
 
-    apache_packages:
+    apache2_packages:
       - apache2
       - apache2-doc
       - apache2-utils
       - apache2-mpm-itk
       - libapache2-mod-php5
 
-    apache_modules:
+    apache2_modules:
       - alias.conf
       - alias.load
       - auth_basic.load
@@ -32,13 +32,13 @@ per-host basis while others will be role based.
     apache_port: "80"
     apache_ssl_port: "443"
 
-#### apache_packages
+#### apache2_packages
 
 A list of all the apt apache2 packages that are needed. By default the
 apache2-mpm-itk worker is installed so that each vhost can be run as the user
 using it.
 
-#### apache_modules
+#### apache2_modules
 
 A list of all the enabled apache2 modules and the config files. Everything
 listed here is symlinked from /etc/apache2/mods-available to
@@ -65,8 +65,6 @@ config file as well as for the VirtualHost lines in the vhost config files.
     php_packages:
       - php5-common
       - php5-cli
-      - php5-suhosin
-      - php5-apc
       - php-pear
       - php5-gd
       - php5-memcache
@@ -148,9 +146,3 @@ ensure that the user account is present and that they can log in via SSH.
 public_html folders will be created and the config will be symlinked to
 sites-enabled so that apache will server their content.
 
-
-### SSH settings
-
-As part of the creation of the vhosts all files within files/ssh/keys are
-combined and added to each enabled user account. This allows a number of users
-to log into each account as the hosting user.
