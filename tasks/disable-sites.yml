@@ -5,3 +5,4 @@
     state: absent
   with_items: disabled_vhost_sites
   notify: Restart apache
+  tags: apache2

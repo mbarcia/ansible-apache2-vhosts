@@ -1,8 +1,13 @@
 ---
 - include: apache2.yml
 
+- include: logrotate.yml
+
 - include: php.yml
 
+- include: apache2_worker_event.yml
+  when: apache2_mpm == 'event' or apache2_mpm == 'worker' 
+  
 - include: create-homes.yml
   when: vhost_sites is defined
 

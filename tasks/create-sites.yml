@@ -3,11 +3,13 @@
   file:
     path: "{{ vhost_base_path }}/shared"
     state: directory
+  tags: apache2
 
 - name: Create blocking robots.txt
   copy:
     src: robots.txt
     dest: "{{ vhost_base_path }}/shared/robots.txt"
+  tags: apache2
 
 - name: Create public_html folders
   file:
@@ -16,6 +18,7 @@
     owner: "{{ item['user'] }}"
     group: "{{ item['group'] }}"
   with_items: vhost_sites
+  tags: apache2
 
 - name: Create public_html symlinks
   file:
@@ -25,6 +28,8 @@
     owner: "{{ item['user'] }}"
     group: "{{ item['group'] }}"
   with_items: vhost_sites
+  ignore_errors: yes
+  tags: apache2
 
 - name: Create log folders
   file:
@@ -33,6 +38,7 @@
     owner: "{{ item['user'] }}"
     group: "{{ item['group'] }}"
   with_items: vhost_sites
+  tags: apache2
 
 - name: Create logs symlinks
   file:
@@ -42,12 +48,14 @@
     owner: "{{ item['user'] }}"
     group: "{{ item['group'] }}"
   with_items: vhost_sites
+  tags: apache2
 
 - name: Create apache2 vhosts
   template:
     src: apache2/vhost.conf.j2
     dest: /etc/apache2/sites-available/{{ item['host'] }}.conf
   with_items: vhost_sites
+  tags: apache2
 
 - name: Enable apache2 vhosts
   file:
@@ -57,3 +65,4 @@
   with_items: vhost_sites
   notify: Restart apache
   when: "item['disabled']|default(false) != True"
+  tags: apache2
