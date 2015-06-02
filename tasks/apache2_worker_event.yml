@@ -1,4 +1,31 @@
 ---
+- name: Disable Apache2 MPM prefork modules
+  apache2_module: 
+    name: "{{ item }}"
+    state: absent
+  with_items: 
+    - mpm_itk
+    - mpm_prefork
+    - php5
+  notify: Restart apache
+  tags: apache2
+
+- name: Disable Apache2 MPM event if worker requested
+  apache2_module: 
+    name: mpm_event
+    state: absent
+  when: apache2_mpm == "worker" 
+  notify: Restart apache
+  tags: apache2
+
+- name: Disable Apache2 MPM worker if event requested
+  apache2_module: 
+    name: mpm_worker
+    state: absent
+  when: apache2_mpm == "event" 
+  notify: Restart apache
+  tags: apache2
+
 - name: UnInstall packages for Apache2 MPM {{ apache2_mpm }}
   apt:
     pkg: "{{ item }}"
@@ -27,33 +54,6 @@
     - actions
     - proxy_fcgi
     - alias
-  notify: Restart apache
-  tags: apache2
-
-- name: Disable Apache2 MPM prefork modules
-  apache2_module: 
-    name: "{{ item }}"
-    state: absent
-  with_items: 
-    - mpm_itk
-    - mpm_prefork
-    - php5
-  notify: Restart apache
-  tags: apache2
-
-- name: Disable Apache2 MPM event if worker requested
-  apache2_module: 
-    name: mpm_event
-    state: absent
-  when: apache2_mpm == "worker" 
-  notify: Restart apache
-  tags: apache2
-
-- name: Disable Apache2 MPM worker if event requested
-  apache2_module: 
-    name: mpm_worker
-    state: absent
-  when: apache2_mpm == "event" 
   notify: Restart apache
   tags: apache2
 
