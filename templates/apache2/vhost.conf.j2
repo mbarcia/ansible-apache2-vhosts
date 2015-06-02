@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-<VirtualHost {{apache_host}}:{{apache_port}}>
+<VirtualHost {{ apache_host|default ('*') }}:{{apache_port}}>
     ServerAdmin                           {{ item['admin_email'] }}
     ServerName                            {{ item['host'] }}
 {% for alias in item['aliases']|default([]) %}
