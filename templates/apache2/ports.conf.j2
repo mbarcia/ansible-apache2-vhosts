@@ -4,10 +4,8 @@ Listen {{ apache_host|default ('*') }}:{{ apache_port }}
 
 <IfModule mod_ssl.c>
     Listen {{ apache_host|default ('*') }}:{{apache_ssl_port}}
-    NameVirtualHost {{ apache_host|default ('*') }}:{{apache_port}}
 </IfModule>
 
 <IfModule mod_gnutls.c>
     Listen {{ apache_host|default ('*') }}:{{apache_ssl_port}}
-    NameVirtualHost {{ apache_host|default ('*') }}:{{apache_port}}
 </IfModule>
